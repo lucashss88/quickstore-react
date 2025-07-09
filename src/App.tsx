@@ -1,0 +1,88 @@
+import './App.css'
+import './index.css'
+import {Routes, Route, BrowserRouter} from 'react-router-dom';
+import Home from './pages/Usuario/Home.tsx';
+import Produtos from './pages/Usuario/Produtos.tsx';
+import CriarProduto from "./components/Admin/CriarProduto.tsx";
+import {Carrinho} from "./pages/Usuario/Carrinho.tsx";
+import {Login} from "./pages/Login.tsx";
+import PrivateRoute from "./routes/PrivateRoute.tsx";
+import Registro from "./pages/Registro.tsx";
+import {ProdutoProvider} from "./context/ProdutoContext.tsx";
+import {CarrinhoProvider} from "./context/CarrinhoContext.tsx";
+import {AuthProvider} from "./context/AuthContext.tsx";
+import Layout from "./pages/Layout.tsx";
+import {PedidoProvider} from "./context/PedidoContext.tsx";
+import Pedidos from "./pages/Usuario/Pedidos.tsx";
+import {Pagamento} from "./pages/Usuario/Pagamento.tsx";
+import {AdminRoute} from "./routes/AdminRoute.tsx";
+import AdminProdutos from "./pages/Admin/AdminProdutos.tsx";
+import {NotFound} from "./pages/NotFound.tsx";
+import AdminPedidos from "./pages/Admin/AdminPedidos.tsx";
+
+export function App() {
+    return (
+        <BrowserRouter>
+            <AuthProvider>
+                <CarrinhoProvider>
+                    <PedidoProvider>
+                        <ProdutoProvider>
+                            <Layout>
+                                <Routes>
+                                    <Route path="/" element={<Login/>}/>
+                                    <Route path="/registro" element={<Registro/>}/>
+
+                                    <Route element={<PrivateRoute />}>
+                                        <Route path="/home" element={
+                                            <Home/>
+                                        }/>
+                                        <Route path="/produtos" element={
+
+                                            <Produtos/>
+
+                                        }/>
+                                        <Route path="/carrinho" element={
+
+                                            <Carrinho/>
+
+                                        }/>
+                                        <Route path="/pedidos" element={
+
+                                            <Pedidos/>
+
+                                        }/>
+                                        <Route path="/pagamento/:pedidoId" element={
+
+                                            <Pagamento/>
+
+                                        }/>
+                                        <Route element={<AdminRoute/>}>
+                                            <Route path="/produtos/criar" element={
+
+                                                <CriarProduto/>
+
+                                            }/>
+                                            <Route path="/admin/produtos" element={
+
+                                                <AdminProdutos/>
+
+                                            }/>
+                                            <Route path="/admin/pedidos" element={
+
+                                                <AdminPedidos/>
+
+                                            }/>
+                                        </Route>
+                                        <Route path="*" element={<NotFound />} />
+                                    </Route>
+                                </Routes>
+                            </Layout>
+                        </ProdutoProvider>
+                    </PedidoProvider>
+                </CarrinhoProvider>
+            </AuthProvider>
+        </BrowserRouter>
+    );
+}
+
+

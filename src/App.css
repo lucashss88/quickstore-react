@@ -1,0 +1,144 @@
+#root {
+  text-align: center;
+}
+
+.bg-qs{
+  background-color: #6610f2;
+}
+
+.btn-pg{
+  background-color: #6610f2;
+}
+
+.btn-pg:hover{
+  background-color: darkslateblue;
+}
+
+.btn-products {
+  margin: 2px;
+  font-size: 12px;
+  width: 20%;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card-container {
+  width: 22%;
+  margin: 10px;
+}
+
+.card-container-pedidos {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 98%;
+  padding-inline: 1.7em;
+  margin: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .container-produtos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .card-container {
+    width: 98%;
+  }
+}
+
+.card-admin {
+  padding-inline: 1.7em;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  text-align: center;
+  border: none;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  text-align: center;
+  padding: 2em;
+}
+
+.card-login {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.75rem;
+  text-align: center;
+  padding: 2.5em;
+}
+
+.card-pedido{
+    width: 100%;
+    height: 100%;
+    border-radius: 0.75rem;
+    text-align: center;
+    padding: 2em;
+    border: 1px solid #6610f2;
+}
+
+.card:hover{
+  border: 1px solid #6610f2;;
+  cursor: pointer;
+  transform: scale(1.02);
+  transition: 0.2s;
+}
+
+.product-card .card-img-top {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 15px;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+}
+
+.product-card .card-img-top img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+.product-card .card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+}
+
+.bg-nav:hover {
+  border: 1px solid white;
+}
+
+.card-criado {
+  border: 2px solid #f04e30; /* Borda vermelha */
+  animation: pulsar 1.5s infinite; /* Animação pulsante */
+  background-color: #fffaf0; /* Fundo levemente diferenciado */
+}
+
+@keyframes pulsar {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(240, 78, 48, 0.5);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(240, 78, 48, 0.7);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(240, 78, 48, 0.5);
+  }
+}
