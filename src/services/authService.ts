@@ -21,9 +21,21 @@ export const login = async (email: string, senha: string) => {
     }
 };
 
-export const register = async (nome: string, email: string, senha: string, role: string) => {
+export const register = async (nome: string, email: string, senha: string) => {
     try{
-        const response = await api.post('/auth/registrar', { email, senha, nome, role});
+        const response = await api.post('/auth/registrar', { email, senha, nome});
+        return response.data;
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.msg || 'Falha no registro. Verifique o console do servidor.';
+        console.error("Erro detalhado do Axios:", error.response?.data);
+        throw new Error(errorMessage);
+    }
+
+}
+
+export const criarAdmin = async (nome: string, email: string, senha: string) => {
+    try{
+        const response = await api.post('/users/admin/criar-admin', { nome, email, senha });
         return response.data;
     } catch (error: any) {
         const errorMessage = error.response?.data?.msg || 'Falha no registro. Verifique o console do servidor.';

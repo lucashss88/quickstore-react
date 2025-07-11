@@ -8,25 +8,6 @@ export function Login() {
     const [senha, setSenha] = useState('');
     const [erroLocal, setErroLocal] = useState('');
 
-    // useEffect(() => {
-    //     try {
-    //         if (usuario && (location.pathname === '/' || location.pathname === '/login')) {
-    //             if (usuario.role === 'admin') {
-    //                 navigate('/admin/produtos');
-    //             }
-    //             if (usuario.role === 'usuario') {
-    //                 navigate('/produtos');
-    //             }
-    //         }
-    //         if (usuario !== undefined && usuario !== null && usuario.nome !== undefined && usuario.nome !== null) {
-    //             console.log('Agora temos usuário: ', usuario.nome);
-    //             toast.success(`Bem-vindo(a) de volta, ${usuario.nome}!`);
-    //         }
-    //     } catch (e: any) {
-    //         throw new e;
-    //     }
-    // }, [usuario, navigate, location.pathname]);
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErroLocal("");

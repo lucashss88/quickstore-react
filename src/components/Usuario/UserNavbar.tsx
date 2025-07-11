@@ -22,7 +22,7 @@ export default function UserNavbar() {
                 <h2 className="text-xl font-bold pt-2 ps-2 ">QuickStore</h2>
                 <div className="d-flex flex-row gap-2 justify-content-between text-end">
                     <button onClick={() => navigate('/produtos')} className="btn bg-nav text-white"><i className="bi bi-shop me-1"></i>Produtos</button>
-                    <button onClick={() => navigate('/carrinho')} className="btn bg-nav text-white"><i className="bi bi-cart me-1"></i>Carrinho [{quantidadeTotal || 0}]</button>
+                    <button onClick={() => navigate('/carrinho')} className="btn bg-nav text-white"><i className="bi bi-cart me-1"></i>Carrinho <span className="bg-danger rounded-circle px-2 py-1">{quantidadeTotal}</span></button>
                     <button onClick={() => navigate('/pedidos')} className="btn bg-nav text-white"><i className="bi bi-bag-fill me-1"></i>Pedidos</button>
                     <div className="dropdown pe-2">
                         <a href="#"

@@ -2,6 +2,7 @@ import {useContext, useState} from "react";
 import {AuthContext} from "../context/AuthContext.tsx";
 import {useNavigate} from "react-router-dom";
 import * as React from "react";
+import {toast} from "react-toastify";
 
 function Registro() {
     const [nome, setNome] = useState('');
@@ -15,8 +16,8 @@ function Registro() {
         e.preventDefault();
         setErro("");
         try{
-            const role = "usuario";
-            await registrar(nome, email, senha, role);
+            await registrar(nome, email, senha);
+            toast.success('Cadastro realizado com sucesso!');
             navigate('/login');
         } catch (e: any) {
             setErro(e.message || "Ocorreu um erro inesperado. Tente novamente.");

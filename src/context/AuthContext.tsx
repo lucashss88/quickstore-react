@@ -17,7 +17,8 @@ interface AuthContextData {
     erro: Error | null;
     login: (email: string, senha: string) => Promise<void>;
     logout: () => void;
-    registrar: (nome: string, email: string, senha: string, role: string) => Promise<Usuario>;
+    registrar: (nome: string, email: string, senha: string) => Promise<Usuario>;
+    criarAdmin: (nome: string, email: string, senha: string) => Promise<Usuario>;
     editProfile: (nome: string, email: string) => Promise<void>;
     isAuthenticated: () => boolean;
 }
@@ -51,10 +52,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const registrar = async (nome: string, email: string, senha: string, role: string) => {
+    const registrar = async (nome: string, email: string, senha: string) => {
         setCarregando(true);
         try {
-            const data = await authService.register(email, senha, nome, role);
+            const data = await authService.register(nome, email, senha);
+            console.log("Dados registrados:", data);
+            setErro(null);
+            return data;
+        } catch (error) {
+            setErro(error as Error);
+            throw error;
+        } finally {
+            setCarregando(false);
+        }
+    }
+
+    const criarAdmin = async (nome: string, email: string, senha: string) => {
+        setCarregando(true);
+        try {
+            const data = await authService.criarAdmin(nome, email, senha);
             console.log("Dados registrados:", data);
             setErro(null);
             return data;
@@ -113,6 +129,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             usuario,
             login,
             registrar,
+            criarAdmin,
             logout,
             isAuthenticated: () => isAuthenticated,
             editProfile,

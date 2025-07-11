@@ -1,31 +1,21 @@
 import {useProduto} from "../../context/ProdutoContext.tsx";
-import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import Toast from "../../components/Toast.tsx";
+import {toast} from "react-toastify";
 import {useCarrinho} from "../../context/CarrinhoContext.tsx";
 import ProdutoModal from "../../components/Usuario/ProdutoModal.tsx";
 import {getImageUrl} from "../../utils/imageUrlHelper.ts";
 
-
 function Produtos() {
     const {produtos = [], erro, carregando} = useProduto();
     const {adicionarItemAoCarrinho} = useCarrinho();
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
     const [produtoSelecionado, setProdutoSelecionado] = useState(null);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const produtosPorPagina = 9;
-    const navigate = useNavigate();
 
     const indiceDoUltimoProduto = paginaAtual * produtosPorPagina;
     const indiceDoPrimeiroProduto = indiceDoUltimoProduto - produtosPorPagina;
     const produtosAtuais = produtos.slice(indiceDoPrimeiroProduto, indiceDoUltimoProduto);
     const totalDePaginas = Math.ceil(produtos.length / produtosPorPagina);
-
-    const irCarrinho = () => {
-        navigate('/carrinho');
-    }
 
     const abrirModal = (produto: any) => {
         setProdutoSelecionado(produto);
@@ -38,19 +28,11 @@ function Produtos() {
     const handleAdicionarAoCarrinho = async (produtoId: number) => {
         try {
             await adicionarItemAoCarrinho(produtoId, 1);
-            setToastMessage("Produto adicionado ao carrinho com sucesso!");
-            setToastType("success");
-            setShowToast(true);
-            setTimeout(() => {
-                setShowToast(false);
-                irCarrinho();
-            }, 2000);
-
-        } catch (error) {
+            toast.success('Produto adicionado ao carrinho com sucesso!');
+            fecharModal();
+        } catch (error: any) {
             console.error('Erro ao adicionar produto ao carrinho:', error);
-            setToastMessage("Erro ao adicionar produto ao carrinho!");
-            setToastType("error");
-            setShowToast(true);
+            toast.error('Erro ao adicionar produto ao carrinho: ' + error.message);
         }
     };
 
@@ -122,11 +104,6 @@ function Produtos() {
                     onAdicionarAoCarrinho={handleAdicionarAoCarrinho}
                 />
             )}
-            <Toast show={showToast}
-                   message={toastMessage}
-                   type={toastType}
-                   onClose={() => setShowToast(false)}
-            />
         </div>
     );
 }

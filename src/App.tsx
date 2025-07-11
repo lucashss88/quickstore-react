@@ -20,6 +20,7 @@ import AdminProdutos from "./pages/Admin/AdminProdutos.tsx";
 import {NotFoundAdmin, NotFoundUsuario} from "./pages/NotFound.tsx";
 import AdminPedidos from "./pages/Admin/AdminPedidos.tsx";
 import AdminPerfil from "./components/Admin/AdminPerfil.tsx";
+import AdminCriar from "./components/Admin/AdminCriar.tsx";
 
 export function App() {
     return (
@@ -67,6 +68,11 @@ export function App() {
                                             <Route path="/produtos/criar" element={
 
                                                 <CriarProduto/>
+
+                                            }/>
+                                            <Route path="/admin/criar" element={
+
+                                                <AdminCriar/>
 
                                             }/>
                                             <Route path="/admin/produtos" element={

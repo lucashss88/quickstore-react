@@ -1,7 +1,7 @@
 import {useCarrinho} from "../../context/CarrinhoContext.tsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import Toast from "../../components/Toast.tsx";
+import {toast} from "react-toastify";
 import {usePedido} from "../../context/PedidoContext.tsx";
 import type {Carrinho} from "../../context/CarrinhoContext.tsx";
 
@@ -18,9 +18,6 @@ export function Carrinho() {
     } = useCarrinho();
     const [carrinho, setCarrinho] = useState<Carrinho>();
     const {finalizarCompra} = usePedido();
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
 
     useEffect(() => {
         const carregarCarrinho = async () => {
@@ -44,22 +41,15 @@ export function Carrinho() {
         const novoPedido = await finalizarCompra();
         try {
             if (novoPedido && novoPedido.id) {
-                setToastMessage("Pedido criado com sucesso!");
-                setToastType("success");
-                setShowToast(true);
+                toast.success('Pedido finalizado com sucesso!');
                 setTimeout(() => {
-                    setShowToast(false);
                     navigate('/pedidos');
                 }, 1500);
             } else {
-                setToastMessage("Erro ao criar pedido. Tente novamente.");
-                setToastType("error");
-                setShowToast(true);
+                toast.error('Erro ao finalizar pedido. Tente novamente.');
             }
         } catch (error) {
-            setToastMessage("Erro ao finalizar pedido. Tente novamente.");
-            setToastType("error");
-            setShowToast(true);
+            toast.error('Erro ao finalizar pedido. Tente novamente.');
         }
 
     };
@@ -79,14 +69,9 @@ export function Carrinho() {
 
             try {
                 await removerItemDoCarrinho(produtoId);
-                setToastMessage("Produto removido com sucesso!");
-                setToastType("success");
-                setShowToast(true);
+                toast.success('Produto removido com sucesso!');
             } catch (error) {
-                setToastMessage("Erro ao remover produto do carrinho. Tente novamente.");
-                setToastType("error");
-            } finally {
-                setShowToast(true);
+                toast.error('Erro ao remover produto do carrinho. Tente novamente.');
             }
         }
 
@@ -110,13 +95,9 @@ export function Carrinho() {
 
         try {
             await atualizarQuantidadeDoItemDoCarrinho(produtoId, quantidade);
-            setToastMessage("Quantidade atualizada com sucesso!");
-            setToastType("success");
-            setShowToast(true);
+            toast.success('Quantidade atualizada com sucesso!');
         } catch (error) {
-            setToastMessage("Erro ao atualizar a quantidade. Tente novamente.");
-            setToastType("error");
-            setShowToast(true);
+            toast.error('Erro ao atualizar quantidade do produto. Tente novamente.');
         }
     }
 
@@ -250,11 +231,6 @@ export function Carrinho() {
                     </div>
                 </div>
             </div>
-            <Toast show={showToast}
-                   message={toastMessage}
-                   type={toastType}
-                   onClose={() => setShowToast(false)}
-            />
         </div>
     );
 }

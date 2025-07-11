@@ -32,10 +32,14 @@ export default function AdminNavbar() {
                             <i className="bi bi-person-circle fs-4 me-2"></i>
                             <strong>{usuario?.nome || 'Admin'}</strong>
                         </a>
-                        <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
+                        <ul className="dropdown-menu dropdown-menu-dark text-small shadow" style={{cursor: 'pointer'}}>
                             <li><a className="dropdown-item" onClick={() => navigate('/admin/perfil')}>Editar Perfil</a></li>
                             <li>
-                                <hr className="dropdown-divider"/>
+                                <hr className="dropdown-divider bg-light mx-md-3 mx-0"/>
+                            </li>
+                            <li><a className="dropdown-item" onClick={() => navigate('/admin/criar')}>Criar Administrador</a></li>
+                            <li>
+                                <hr className="dropdown-divider bg-light mx-md-3 mx-0"/>
                             </li>
                             <li>
                                 <button className="dropdown-item" onClick={handleLogout}>
