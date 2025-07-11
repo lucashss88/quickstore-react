@@ -1,18 +1,14 @@
 import {useProduto} from "../../context/ProdutoContext.tsx";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import Toast from "../../components/Toast.tsx";
 import AdminProdutoModal from "../../components/Admin/AdminProdutoModal.tsx";
 import {getImageUrl} from "../../utils/imageUrlHelper.ts";
-
+import {toast} from "react-toastify";
 
 export default function AdminProdutos() {
     const {produtos = [], erro, carregando, deletarProduto} = useProduto();
     const navigate = useNavigate();
     const [produtoSelecionado, setProdutoSelecionado] = useState(null);
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
 
     const irParaCriarProduto = () => {
         navigate('/produtos/criar');
@@ -34,13 +30,9 @@ export default function AdminProdutos() {
         if (window.confirm("Tem certeza que deseja deletar este produto?")) {
             try {
                 await deletarProduto(id);
-                setToastMessage("Produto deletado com sucesso!");
-                setToastType("success");
+                toast.success('Produto deletado com sucesso!');
             } catch (error: any) {
-                setToastMessage(error.message || "Erro ao deletar produto.");
-                setToastType("error");
-            } finally {
-                setShowToast(true);
+                toast.error('Erro ao deletar produto: ' + error.message);
             }
         }
     };
@@ -125,13 +117,6 @@ export default function AdminProdutos() {
                     onClosenModal={fecharModal}
                 />
             )}
-
-            <Toast
-                show={showToast}
-                message={toastMessage}
-                type={toastType}
-                onClose={() => setShowToast(false)}
-            />
         </div>
     );
 }

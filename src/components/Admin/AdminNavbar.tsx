@@ -1,20 +1,15 @@
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import {AuthContext} from "../../context/AuthContext.tsx";
 import {useNavigate} from "react-router-dom";
-import Toast from "../Toast.tsx";
+import {toast} from "react-toastify";
 
 export default function AdminNavbar() {
     const {logout, usuario} = useContext(AuthContext);
     const navigate = useNavigate();
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
 
     const handleLogout = async () => {
         logout();
-        setToastMessage("Logout realizado com sucesso! Volte sempre!");
-        setToastType("success");
-        setShowToast(true);
+        toast.success('Logout realizado com sucesso!');
         console.log("Logout efetuado com sucesso!");
         navigate("/");
     }
@@ -35,10 +30,10 @@ export default function AdminNavbar() {
                            className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="bi bi-person-circle fs-4 me-2"></i>
-                            <strong>{usuario?.email || 'Admin'}</strong>
+                            <strong>{usuario?.nome || 'Admin'}</strong>
                         </a>
                         <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-                            <li><a className="dropdown-item" href="#">Configurações</a></li>
+                            <li><a className="dropdown-item" onClick={() => navigate('/admin/perfil')}>Editar Perfil</a></li>
                             <li>
                                 <hr className="dropdown-divider"/>
                             </li>
@@ -52,11 +47,6 @@ export default function AdminNavbar() {
                     </div>
                 </div>
             </nav>
-            <Toast show={showToast}
-                   message={toastMessage}
-                   type={toastType}
-                   onClose={() => setShowToast(false)}
-            />
         </div>
     );
 }

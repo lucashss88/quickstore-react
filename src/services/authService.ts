@@ -9,11 +9,11 @@ export const login = async (email: string, senha: string) => {
             localStorage.setItem('usuario', JSON.stringify(response.data.user));
             localStorage.setItem('role', response.data.user.role);
             console.log("Login realizado com sucesso:", response.data.user);
+            return response.data;
         } else {
             console.error("Dados inválidos recebidos do backend:", response.data);
             throw new Error('Dados de login inválidos');
         }
-        return response.data;
     } catch (error: any) {
         const errorMessage = error.response?.data?.msg || 'Falha no login. Verifique o console do servidor.';
         console.error("Erro detalhado do Axios:", error.response?.data);
@@ -49,15 +49,16 @@ export const getUsuarioLogado = () => {
     }
 };
 
-export const me = async () => {
+export const editProfile = async (nome: string, email: string) => {
     try {
-        const response = await api.get('/auth/me');
+        const response = await api.put('/users/me', {nome, email});
         return response.data;
-    } catch (error) {
-        console.error("Erro ao buscar informações do usuário:", error);
-        return null;
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.msg || "Erro ao atualizar perfil.";
+        console.error("Erro detalhado ao editar perfil:", error.response?.data);
+        throw new Error(errorMessage);
     }
-}
+};
 
 export const isAuthenticated = () => {
     return !!localStorage.getItem('token');

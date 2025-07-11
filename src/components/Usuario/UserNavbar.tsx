@@ -1,23 +1,18 @@
 import {AuthContext} from "../../context/AuthContext.tsx";
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import {useNavigate} from "react-router-dom";
 import {useCarrinho} from "../../context/CarrinhoContext.tsx";
-import Toast from "../Toast.tsx";
+import {toast} from "react-toastify";
 
 export default function UserNavbar() {
-    const {logout} = useContext(AuthContext);
+    const {logout, usuario} = useContext(AuthContext);
     const navigate = useNavigate();
     const {quantidadeTotal} = useCarrinho();
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
 
     const handleLogout = async () => {
         logout();
-        setToastMessage("Logout realizado com sucesso! Volte sempre!");
-        setToastType("success");
-        setShowToast(true);
-        console.log("Logout efetuado com sucesso!", localStorage.getItem("token"));
+        toast.success('Logout realizado com sucesso!');
+        console.log("Logout efetuado com sucesso!");
         navigate("/");
     }
 
@@ -29,14 +24,28 @@ export default function UserNavbar() {
                     <button onClick={() => navigate('/produtos')} className="btn bg-nav text-white"><i className="bi bi-shop me-1"></i>Produtos</button>
                     <button onClick={() => navigate('/carrinho')} className="btn bg-nav text-white"><i className="bi bi-cart me-1"></i>Carrinho [{quantidadeTotal || 0}]</button>
                     <button onClick={() => navigate('/pedidos')} className="btn bg-nav text-white"><i className="bi bi-bag-fill me-1"></i>Pedidos</button>
-                    <button onClick={handleLogout} className="btn text-white"><i className="bi bi-box-arrow-left me-1"></i>Sair</button>
+                    <div className="dropdown pe-2">
+                        <a href="#"
+                           className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i className="bi bi-person-circle fs-4 me-2"></i>
+                            <strong>{usuario?.nome || 'Usuario'}</strong>
+                        </a>
+                        <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
+                            <li><a className="dropdown-item" onClick={() => navigate('/perfil')}>Editar Perfil</a></li>
+                            <li>
+                                <hr className="dropdown-divider"/>
+                            </li>
+                            <li>
+                                <button className="dropdown-item" onClick={handleLogout}>
+                                    <i className="bi bi-box-arrow-left me-2"></i>
+                                    Sair
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
-            <Toast show={showToast}
-                   message={toastMessage}
-                   type={toastType}
-                   onClose={() => setShowToast(false)}
-            />
         </div>
     );
 }

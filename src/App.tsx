@@ -17,8 +17,9 @@ import Pedidos from "./pages/Usuario/Pedidos.tsx";
 import {Pagamento} from "./pages/Usuario/Pagamento.tsx";
 import {AdminRoute} from "./routes/AdminRoute.tsx";
 import AdminProdutos from "./pages/Admin/AdminProdutos.tsx";
-import {NotFound} from "./pages/NotFound.tsx";
+import {NotFoundAdmin, NotFoundUsuario} from "./pages/NotFound.tsx";
 import AdminPedidos from "./pages/Admin/AdminPedidos.tsx";
+import AdminPerfil from "./components/Admin/AdminPerfil.tsx";
 
 export function App() {
     return (
@@ -32,7 +33,7 @@ export function App() {
                                     <Route path="/" element={<Login/>}/>
                                     <Route path="/registro" element={<Registro/>}/>
 
-                                    <Route element={<PrivateRoute />}>
+                                    <Route element={<PrivateRoute/>}>
                                         <Route path="/home" element={
                                             <Home/>
                                         }/>
@@ -56,6 +57,12 @@ export function App() {
                                             <Pagamento/>
 
                                         }/>
+                                        <Route path="/perfil" element={
+
+                                            <AdminPerfil/>
+
+                                        }/>
+                                        <Route path="*" element={<NotFoundUsuario/>}/>
                                         <Route element={<AdminRoute/>}>
                                             <Route path="/produtos/criar" element={
 
@@ -72,8 +79,13 @@ export function App() {
                                                 <AdminPedidos/>
 
                                             }/>
+                                            <Route path="/admin/perfil" element={
+
+                                                <AdminPerfil/>
+
+                                            }/>
                                         </Route>
-                                        <Route path="*" element={<NotFound />} />
+                                        <Route path="*" element={<NotFoundAdmin/>}/>
                                     </Route>
                                 </Routes>
                             </Layout>

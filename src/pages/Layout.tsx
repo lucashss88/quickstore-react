@@ -2,27 +2,21 @@ import {useLocation, useNavigate} from "react-router-dom";
 import UserNavbar from "../components/Usuario/UserNavbar.tsx";
 import * as React from "react";
 import {useAuth} from "../context/AuthContext.tsx";
-import {useEffect, useState} from "react";
-import Toast from "../components/Toast.tsx";
 import AdminNavbar from "../components/Admin/AdminNavbar.tsx";
-
+import 'react-toastify/dist/ReactToastify.css';
+import {toast, ToastContainer} from "react-toastify";
+import {useEffect} from "react";
 
 export default function Layout({children}: { children: React.ReactNode }) {
     const location = useLocation();
     const {usuario} = useAuth();
     const navigate = useNavigate();
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<'success' | 'error' | 'warning' | 'info'>('success');
 
     useEffect(() => {
-        if (usuario && (location.pathname === '/' || location.pathname === '/login')) {
-            const message = `Login realizado com sucesso, ${usuario.email}!`;
-            setToastMessage(message);
-            setToastType('success');
-            setShowToast(true);
+        if (usuario && (location.pathname == '/' || location.pathname == '/login')) {
+            toast.success(`Bem vindo(a) de volta, ${usuario.nome}!`);
 
-            if (usuario.role === 'admin') {
+            if (usuario.role === 'admin'){
                 navigate('/admin/produtos');
             } else {
                 navigate('/produtos');
@@ -48,13 +42,20 @@ export default function Layout({children}: { children: React.ReactNode }) {
         <div>
             {renderBar()}
             <main>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={4000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
                 {children}
             </main>
-            <Toast show={showToast}
-                   message={toastMessage}
-                   type={toastType}
-                   onClose={() => setShowToast(false)}
-            />
         </div>
     );
 }
