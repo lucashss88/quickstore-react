@@ -17,7 +17,7 @@ export interface Produto {
     descricao: string;
     preco: number;
     estoque: number;
-    imagemUrl?: string;
+    imagemUrl: string;
 }
 
 interface ProdutoContextData {
@@ -27,7 +27,7 @@ interface ProdutoContextData {
     listarTodos: () => Promise<void>;
     criarProduto: (produto: Omit<Produto, "id">) => Promise<void>;
     buscarProdutosporId: (id: number) => Promise<Produto | undefined>;
-    atualizarProduto: (id: number, produtoAtualizado: Produto) => Promise<void>;
+    atualizarProduto: (id: number, produtoAtualizado: Omit<Produto, "id">) => Promise<void>;
     deletarProduto: (id: number) => Promise<void>;
     enviarImagem: (file: File) => Promise<string | undefined>;
 }
@@ -90,7 +90,7 @@ export const ProdutoProvider = ({children}: { children: React.ReactNode }) => {
         }
     }
 
-    const atualizarProduto = async (id: number, produtoAtualizado: Produto) => {
+    const atualizarProduto = async (id: number, produtoAtualizado: Omit<Produto, 'id'>) => {
         setCarregando(true);
         try {
             const response = await atualizarProdutoApi(id, produtoAtualizado);

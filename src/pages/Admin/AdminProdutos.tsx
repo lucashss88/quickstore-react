@@ -9,9 +9,16 @@ export default function AdminProdutos() {
     const {produtos = [], erro, carregando, deletarProduto} = useProduto();
     const navigate = useNavigate();
     const [produtoSelecionado, setProdutoSelecionado] = useState(null);
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const produtosPorPagina = 7;
+
+    const indiceDoUltimoProduto = paginaAtual * produtosPorPagina;
+    const indiceDoPrimeiroProduto = indiceDoUltimoProduto - produtosPorPagina;
+    const produtosAtuais = produtos.slice(indiceDoPrimeiroProduto, indiceDoUltimoProduto);
+    const totalDePaginas = Math.ceil(produtos.length / produtosPorPagina);
 
     const irParaCriarProduto = () => {
-        navigate('/produtos/criar');
+        navigate('/admin/produtos/criar');
     };
 
     const irParaEditarProduto = (id: number) => {
@@ -64,8 +71,8 @@ export default function AdminProdutos() {
                             </tr>
                             </thead>
                             <tbody className="align-middle w-100 ">
-                            {produtos.length > 0 ? (
-                                produtos.map(p => (
+                            {produtosAtuais.length > 0 ? (
+                                produtosAtuais.map(p => (
                                     <tr key={p.id} onClick={() => abrirModal(p)} style={{ cursor: 'pointer' }}>
                                         <td>
                                             <div className="d-flex align-items-center">
@@ -110,6 +117,31 @@ export default function AdminProdutos() {
                     </div>
                 </div>
             </div>
+            {totalDePaginas > 1 && (
+                <nav className="d-flex justify-content-center mt-4">
+                    <ul className="pagination">
+                        <li className={`page-item ${paginaAtual === 1 ? 'disabled' : ''}`}>
+                            <button className=" page-link" onClick={() => setPaginaAtual(paginaAtual - 1)}>
+                                Anterior
+                            </button>
+                        </li>
+
+                        {Array.from({ length: totalDePaginas }, (_, index) => (
+                            <li key={index + 1} className={`page-item ${paginaAtual === index + 1 ? 'active' : ''}`}>
+                                <button className="page-link" onClick={() => setPaginaAtual(index + 1)}>
+                                    {index + 1}
+                                </button>
+                            </li>
+                        ))}
+
+                        <li className={`page-item ${paginaAtual === totalDePaginas ? 'disabled' : ''}`}>
+                            <button className="page-link" onClick={() => setPaginaAtual(paginaAtual + 1)}>
+                                Próximo
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            )}
 
             {produtoSelecionado && (
                 <AdminProdutoModal

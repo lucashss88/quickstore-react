@@ -1,5 +1,17 @@
 #root {
   text-align: center;
+  width: 100%;
+}
+
+.div-main{
+  width: 100%;
+}
+
+@media screen and (min-width: 300px) {
+  .div-main{
+    width: 100%;
+    min-width: 300px;
+  }
 }
 
 .bg-qs{
@@ -123,22 +135,25 @@
 }
 
 .card-criado {
-  border: 2px solid #f04e30; /* Borda vermelha */
-  animation: pulsar 1.5s infinite; /* Animação pulsante */
-  background-color: #fffaf0; /* Fundo levemente diferenciado */
+  border: 2px solid #f04e30;
+  animation: pulsar 1.5s infinite;
+  background-color: #fffaf0;
 }
 
 @keyframes pulsar {
   0% {
     transform: scale(1);
     box-shadow: 0 0 5px rgba(240, 78, 48, 0.5);
+    border: 2px solid #f04e30;
   }
   50% {
     transform: scale(1.02);
     box-shadow: 0 0 15px rgba(240, 78, 48, 0.7);
+    border: 2px solid #f04e30;
   }
   100% {
     transform: scale(1);
-    box-shadow: 0 0 5px rgba(240, 78, 48, 0.5);
+    box-shadow: 0 0 5px rgba(112, 48, 240, 0.5);
+    border: 2px solid rgba(112, 48, 240, 0.5);
   }
 }

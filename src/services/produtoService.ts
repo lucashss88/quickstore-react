@@ -10,7 +10,7 @@ interface Produto {
 }
 
 export const listarProdutos = async () => {
-    try{
+    try {
         const response = await api.get('/produtos');
         return response.data || [];
     } catch (error: any) {
@@ -23,7 +23,15 @@ export const criarProduto = (produto: Omit<Produto, "id">) => api.post('/produto
 
 export const deletarProduto = (id: number) => api.delete(`/produtos/${id}`);
 
-export const atualizarProduto = (id: number, produto: unknown) => api.put(`/produtos/${id}`, produto);
+export const atualizarProduto = async (id: number, produto: Omit<Produto, "id">) => {
+    try {
+        const response = await api.put(`/produtos/${id}`, produto);
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao editar pedido:", error);
+        throw new Error('Falha ao editar pedido');
+    }
+}
 
 export const buscarProdutoPorId = (id: number) => api.get(`/produtos/${id}`);
 
@@ -31,7 +39,7 @@ export const uploadImagem = async (file: File) => {
     const formData = new FormData();
     formData.append('imagem', file);
 
-    try{
+    try {
         const response = await api.post('/produtos/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'

@@ -21,6 +21,7 @@ import {NotFoundAdmin, NotFoundUsuario} from "./pages/NotFound.tsx";
 import AdminPedidos from "./pages/Admin/AdminPedidos.tsx";
 import AdminPerfil from "./components/Admin/AdminPerfil.tsx";
 import AdminCriar from "./components/Admin/AdminCriar.tsx";
+import AdminDashboard from "./pages/Admin/AdminDashboard.tsx";
 
 export function App() {
     return (
@@ -65,7 +66,12 @@ export function App() {
                                         }/>
                                         <Route path="*" element={<NotFoundUsuario/>}/>
                                         <Route element={<AdminRoute/>}>
-                                            <Route path="/produtos/criar" element={
+                                            <Route path="/admin/produtos/criar" element={
+
+                                                <CriarProduto/>
+
+                                            }/>
+                                            <Route path="/admin/produtos/editar/:id" element={
 
                                                 <CriarProduto/>
 
@@ -88,6 +94,11 @@ export function App() {
                                             <Route path="/admin/perfil" element={
 
                                                 <AdminPerfil/>
+
+                                            }/>
+                                            <Route path="/admin" element={
+
+                                                <AdminDashboard/>
 
                                             }/>
                                         </Route>

@@ -17,7 +17,7 @@ export default function Layout({children}: { children: React.ReactNode }) {
             toast.success(`Bem vindo(a) de volta, ${usuario.nome}!`);
 
             if (usuario.role === 'admin'){
-                navigate('/admin/produtos');
+                navigate('/admin');
             } else {
                 navigate('/produtos');
             }
@@ -39,7 +39,7 @@ export default function Layout({children}: { children: React.ReactNode }) {
     };
 
     return (
-        <div>
+        <div className="div-main">
             {renderBar()}
             <main>
                 <ToastContainer
