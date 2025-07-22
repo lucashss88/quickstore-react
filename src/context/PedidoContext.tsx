@@ -55,6 +55,7 @@ interface PedidoContextData {
     finalizarCompra: () => Promise<Pedido>;
     listarPedidos: () => Promise<Pedido[] | undefined>;
     pedidos: Pedido[] | null;
+    vendasTotais: number | undefined;
     aceitarPedido: (pedidoId: number) => Promise<void>;
     pagarPedido: (pedidoId: number, dadosCartao: DadosCartao) => Promise<void>;
     finalizarPedido: (pedidoId: number) => Promise<void>;
@@ -62,6 +63,7 @@ interface PedidoContextData {
     cancelarPedido: (pedidoId: number) => Promise<void>;
     listarPedidosAdmin: () => Promise<Pedido[] | undefined>;
     listarPedidoId: (pedidoId: number) => Promise<Pedido | undefined>;
+    listarVendasTotais: () => Promise<number>;
 }
 
 export const PedidoContext = createContext<PedidoContextData | null>(null);
@@ -71,6 +73,7 @@ export const PedidoProvider = ({children}: { children: React.ReactNode }) => {
     const [pedidos, setPedidos] = useState<Pedido[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState<Error | null>(null);
+    const [vendasTotais, setVendasTotais] = useState<number>();
     const navigate = useNavigate();
 
     // @ts-ignore
@@ -139,6 +142,26 @@ export const PedidoProvider = ({children}: { children: React.ReactNode }) => {
             setPedidos(response);
             setErro(null);
             return response;
+        } catch (e: any) {
+            if (e.response?.status === 401) {
+                console.warn("Token expirado. Redirecionando para login.")
+                navigate('/');
+            } else {
+                console.error("Erro ao carregar carrinho:", e);
+                setErro(e as Error);
+            }
+            return [];
+        } finally {
+            setCarregando(false);
+        }
+    }
+
+    const listarVendasTotais = async () => {
+        try {
+            const vendas = await pedidoService.listarVendasTotais();
+            setVendasTotais(vendas);
+            setErro(null);
+            return vendas;
         } catch (e: any) {
             if (e.response?.status === 401) {
                 console.warn("Token expirado. Redirecionando para login.")
@@ -239,7 +262,9 @@ export const PedidoProvider = ({children}: { children: React.ReactNode }) => {
             enviarPedido,
             cancelarPedido,
             listarPedidosAdmin,
-            listarPedidoId
+            listarPedidoId,
+            listarVendasTotais,
+            vendasTotais,
         }}>
             {children}
         </PedidoContext.Provider>

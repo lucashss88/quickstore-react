@@ -45,6 +45,18 @@ export const criarAdmin = async (nome: string, email: string, senha: string) => 
 
 }
 
+export const buscarUsuarios = async () => {
+    try{
+        const response = await api.get('/users/admin/usuarios');
+        return response.data;
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.msg || 'Falha na busca dos usuários. Verifique o console do servidor.';
+        console.error("Erro detalhado do Axios:", error.response?.data);
+        throw new Error(errorMessage);
+    }
+
+}
+
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');

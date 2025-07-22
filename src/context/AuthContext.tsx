@@ -1,9 +1,9 @@
+import * as React from "react";
 import {createContext, useContext, useEffect, useState} from "react";
 import * as authService from "../services/authService";
-import * as React from "react";
 import {useNavigate} from "react-router-dom";
 
-interface Usuario {
+export interface Usuario {
     id: number;
     password: string;
     email: string;
@@ -20,6 +20,7 @@ interface AuthContextData {
     registrar: (nome: string, email: string, senha: string) => Promise<Usuario>;
     criarAdmin: (nome: string, email: string, senha: string) => Promise<Usuario>;
     editProfile: (nome: string, email: string) => Promise<void>;
+    buscarUsuarios: () => Promise<Usuario[]>;
     isAuthenticated: () => boolean;
 }
 
@@ -82,6 +83,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
+    const buscarUsuarios = async () => {
+        try{
+            return await authService.buscarUsuarios();
+        } catch (error) {
+            console.error("Erro ao buscar usuarios:", error);
+        }
+    }
+
     const logout = () => {
         authService.logout();
         setUsuario(null);
@@ -133,6 +142,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             logout,
             isAuthenticated: () => isAuthenticated,
             editProfile,
+            buscarUsuarios,
             carregando,
             erro
         }}>

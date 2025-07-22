@@ -1,28 +1,64 @@
-import {useAuth} from "../../context/AuthContext.tsx";
+import {useAuth, type Usuario} from "../../context/AuthContext.tsx";
 import {Link} from "lucide-react";
-
-const mockKpis = {
-    totalVendas: 48590.75,
-    totalPedidos: 124,
-    novosClientes: 12,
-};
-
-const mockClientesRecentes = [
-    { id: 101, nome: 'Ana Silva', email: 'ana.silva@email.com', dataCadastro: '2025-07-16' },
-    { id: 102, nome: 'Bruno Costa', email: 'bruno.costa@email.com', dataCadastro: '2025-07-16' },
-    { id: 103, nome: 'Carla Dias', email: 'carla.dias@email.com', dataCadastro: '2025-07-15' },
-    { id: 104, nome: 'Daniel Farias', email: 'daniel.farias@email.com', dataCadastro: '2025-07-15' },
-    { id: 105, nome: 'Eduarda Lima', email: 'eduarda.lima@email.com', dataCadastro: '2025-07-14' },
-];
-// --- Fim dos Dados de Exemplo ---
+import {useEffect, useState} from "react";
+import {usePedido} from "../../context/PedidoContext.tsx";
 
 export default function AdminDashboard() {
-    const { usuario } = useAuth();
+    const { usuario, buscarUsuarios } = useAuth();
+    const { listarVendasTotais, listarPedidosAdmin } = usePedido();
+    const [vendas, setVendas] = useState(0);
+    const [pedidosTotais, setPedidosTotais] = useState(0);
+    const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+    const [totalUsuarios, setTotalUsuarios] = useState(0);
 
-    // Função para formatar a data
-    const formatarData = (data: string) => {
-        return new Date(data).toLocaleDateString('pt-BR');
-    };
+    useEffect(()=> {
+        const carregarVendas = async () => {
+            try {
+                const response = await listarVendasTotais();
+                setVendas(response);
+            } catch (e) {
+                console.error("Erro ao carregar vendas: ", e);
+            }
+        };
+
+        const carregarPedidos = async () => {
+            try {
+                const response = await listarPedidosAdmin();
+                if (response !== undefined) {
+                    setPedidosTotais(response.length);
+                }
+            } catch (e) {
+                console.error("Erro ao carregar pedidos: ", e);
+            }
+        };
+
+        const buscarUsuariosTotais = async () => {
+            try {
+                const usuarios = await buscarUsuarios();
+                setTotalUsuarios(usuarios.length);
+            } catch (e) {
+                console.error("Erro ao carregar pedidos: ", e);
+            }
+        };
+
+        const usuariosTotais = async () => {
+            try {
+                const usuarios = await buscarUsuarios();
+                setUsuarios(usuarios);
+            } catch (e) {
+                console.error("Erro ao carregar pedidos: ", e);
+            }
+        };
+
+        carregarVendas();
+        carregarPedidos();
+        buscarUsuariosTotais();
+        usuariosTotais();
+    }, []);
+
+    // const formatarData = (data: string) => {
+    //     return new Date(data).toLocaleDateString('pt-BR');
+    // };
 
     return (
         <div className="container-fluid p-4">
@@ -40,7 +76,7 @@ export default function AdminDashboard() {
                             </div>
                             <div>
                                 <p className="card-text text-muted mb-1">Total de Vendas</p>
-                                <h4 className="card-title mb-0">R$ {mockKpis.totalVendas.toFixed(2)}</h4>
+                                <h4 className="card-title mb-0">R$ {vendas.toFixed(2)}</h4>
                             </div>
                         </div>
                     </div>
@@ -53,7 +89,7 @@ export default function AdminDashboard() {
                             </div>
                             <div>
                                 <p className="card-text text-muted mb-1">Pedidos Recebidos</p>
-                                <h4 className="card-title mb-0">{mockKpis.totalPedidos}</h4>
+                                <h4 className="card-title mb-0">{pedidosTotais}</h4>
                             </div>
                         </div>
                     </div>
@@ -66,7 +102,7 @@ export default function AdminDashboard() {
                             </div>
                             <div>
                                 <p className="card-text text-muted mb-1">Média por Pedido</p>
-                                <h4 className="card-title mb-0">R$ {(mockKpis.totalVendas / mockKpis.totalPedidos).toFixed(2)}</h4>
+                                <h4 className="card-title mb-0">R$ {(vendas / pedidosTotais).toFixed(2)}</h4>
                             </div>
                         </div>
                     </div>
@@ -78,8 +114,8 @@ export default function AdminDashboard() {
                                 <i className="bi bi-person-plus fs-2 text-qs"></i>
                             </div>
                             <div>
-                                <p className="card-text text-muted mb-1">Novos Clientes (Mês)</p>
-                                <h4 className="card-title mb-0">{mockKpis.novosClientes}</h4>
+                                <p className="card-text text-muted mb-1">Total de Clientes</p>
+                                <h4 className="card-title mb-0">{totalUsuarios}</h4>
                             </div>
                         </div>
                     </div>
@@ -120,21 +156,18 @@ export default function AdminDashboard() {
                             <div className="table-responsive">
                                 <table className="table table-hover mb-0">
                                     <tbody>
-                                    {mockClientesRecentes.map(cliente => (
-                                        <tr key={cliente.id}>
+                                    {usuarios.map(usuario => (
+                                        <tr key={usuario.id}>
                                             <td>
                                                 <div className="d-flex align-items-center">
                                                     <div className="p-2 bg-secondary bg-opacity-10 rounded-circle me-3">
                                                         <i className="bi bi-person"></i>
                                                     </div>
                                                     <div>
-                                                        <div className="fw-bold">{cliente.nome}</div>
-                                                        <small className="text-muted">{cliente.email}</small>
+                                                        <div className="fw-bold">{usuario.nome}</div>
+                                                        <small className="text-muted">{usuario.email}</small>
                                                     </div>
                                                 </div>
-                                            </td>
-                                            <td className="text-end text-muted align-middle">
-                                                <small>{formatarData(cliente.dataCadastro)}</small>
                                             </td>
                                         </tr>
                                     ))}

@@ -86,6 +86,16 @@ export async function listarPedidosAdmin() {
     }
 }
 
+export async function listarVendasTotais() {
+    try {
+        const response = await api.get('/pedidos/admin/vendas');
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao listar pedidos:", error);
+        throw new Error('Falha ao listar pedidos');
+    }
+}
+
 export const aceitarPedido = async (pedidoId: number) =>  {
     try {
         const response = await api.post(`/pedidos/${pedidoId}/aceitar`);
